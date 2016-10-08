@@ -10,6 +10,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.types.DataTypes
 import org.apache.spark.{SparkEnv, SparkException}
+import org.apache.spark.storage.StorageLevel
 
 object Utils {
 
@@ -221,4 +222,24 @@ object Utils {
   def classExists(name: String): Boolean = {
     scala.util.Try(Class.forName(name)).isSuccess
   }
+
+  def getStorageLevel(storageLevel: String): StorageLevel = {
+
+    storageLevel match {
+      case "NONE" => org.apache.spark.storage.StorageLevel.NONE
+      case "DISK_ONLY" => org.apache.spark.storage.StorageLevel.DISK_ONLY
+      case "DISK_ONLY_2" => org.apache.spark.storage.StorageLevel.DISK_ONLY_2
+      case "MEMORY_ONLY" => org.apache.spark.storage.StorageLevel.MEMORY_ONLY
+      case "MEMORY_ONLY_2" => org.apache.spark.storage.StorageLevel.MEMORY_ONLY_2
+      case "MEMORY_ONLY_SER" => org.apache.spark.storage.StorageLevel.MEMORY_ONLY_SER
+      case "MEMORY_ONLY_SER_2" => org.apache.spark.storage.StorageLevel.MEMORY_ONLY_SER_2
+      case "MEMORY_AND_DISK" => org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK
+      case "MEMORY_AND_DISK_2" => org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_2
+      case "MEMORY_AND_DISK_SER" => org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_SER
+      case "MEMORY_AND_DISK_SER_2" => org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_SER_2
+      case "OFF_HEAP" => org.apache.spark.storage.StorageLevel.OFF_HEAP
+      case _ => throw new IllegalArgumentException(s"Invalid storage level $storageLevel")
+    }
+  }
+
 }

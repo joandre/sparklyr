@@ -111,12 +111,42 @@ copy_to.src_spark <- function(dest, df, name, ...) {
   copy_to(spark_connection(dest), df, name, ...)
 }
 
+#' Persist a Spark Table
+#'
+#' By default, this function works as persist function in Spark, so data
+#' is not loaded into memory unless you tell a storage level. Depending on
+#' which storage level you choose, operations on cached tables used should
+#' be more or less performant. See
+#' \href{http://spark.apache.org/docs/latest/programming-guide.html#rdd-persistence}{Spark programming guide}
+#' for more details.
+#'
+#' @param sc A \code{spark_connection}.
+#' @param name The table name.
+#' @param storageLevel The caching storage level for the spark table.
+#' @param force Force the data to be loaded into memory? This is accomplished
+#'   by calling the \code{count} API on the associated Spark DataFrame.
+#'
+#' @export
+tbl_persist <- function(sc, name, storageLevel, force = TRUE) {
+  tbl <- tbl(sc, name)
+  sdf <- spark_dataframe(tbl)
+
+  sl <- sc %>% invoke_static("sparklyr.Utils", "getStorageLevel", storageLevel)
+  invoke(sdf, "persist", sl)
+  if (force)
+    invoke(sdf, "count")
+
+  invisible(NULL)
+}
+
 #' Cache a Spark Table
 #'
 #' Force a Spark table with name \code{name} to be loaded into memory.
 #' Operations on cached tables should normally (although not always)
 #' be more performant than the same operation performed on an uncached
 #' table.
+#' Note that cache is special case of persist where storage level is
+#' MEMORY_ONLY
 #'
 #' @param sc A \code{spark_connection}.
 #' @param name The table name.

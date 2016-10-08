@@ -19,5 +19,7 @@ Force a Spark table with name \code{name} to be loaded into memory.
 Operations on cached tables should normally (although not always)
 be more performant than the same operation performed on an uncached
 table.
+Note that cache is special case of persist where storage level is
+MEMORY_ONLY
 }
 
