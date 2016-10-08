@@ -127,7 +127,7 @@ copy_to.src_spark <- function(dest, df, name, ...) {
 #'   by calling the \code{count} API on the associated Spark DataFrame.
 #'
 #' @export
-tbl_persist <- function(sc, name, storageLevel, force = TRUE) {
+tbl_persist <- function(sc, name, storageLevel = "NONE", force = TRUE) {
   tbl <- tbl(sc, name)
   sdf <- spark_dataframe(tbl)
 

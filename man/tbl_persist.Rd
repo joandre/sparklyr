@@ -4,7 +4,7 @@
 \alias{tbl_persist}
 \title{Persist a Spark Table}
 \usage{
-tbl_persist(sc, name, storageLevel, force = TRUE)
+tbl_persist(sc, name, storageLevel = "NONE", force = TRUE)
 }
 \arguments{
 \item{sc}{A \code{spark_connection}.}
